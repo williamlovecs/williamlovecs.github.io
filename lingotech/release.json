@@ -1,71 +1,19 @@
 {
-  "version": "4.1",
-  "baseline_git_blob": "89fe59dd1ed110cb0223748b11873587eb507271",
-  "html_sha256": "c6c29e63fc443e63631072b39b76cf736c275d7fd7512ae1ad0ff9442947645c",
-  "bytes": 1139635,
-  "sources": [
-    {
-      "name": "IMG_0176.JPG",
-      "sha256": "529097fe141081e06c3dc098a67db02f1aa30050a2204621c8033a405d48e14e",
-      "original_px": [
-        6000,
-        4000
-      ],
-      "web_px": [
-        880,
-        587
-      ],
-      "web_bytes": 45164
-    },
-    {
-      "name": "112.HEIC",
-      "sha256": "88461883954bcc921944be7ade775c50f71c7b963cf7d5ae644916231a1e3c2e",
-      "original_px": [
-        4032,
-        3024
-      ],
-      "web_px": [
-        720,
-        540
-      ],
-      "web_bytes": 65400
-    },
-    {
-      "name": "IMG_1921.JPG",
-      "sha256": "babe08a537d814e57e117dfb98dcf417020dbac189bc84935be13cf909cec476",
-      "original_px": [
-        5544,
-        3696
-      ],
-      "web_px": [
-        600,
-        400
-      ],
-      "web_bytes": 27248
-    }
-  ],
+  "version": "4.2",
+  "baseline_version": "4.1",
+  "baseline_html_sha256": "c6c29e63fc443e63631072b39b76cf736c275d7fd7512ae1ad0ff9442947645c",
+  "html_sha256": "c4ab6ed46d72c97a4810d3e13f428dcff56cea993ae48199fff2235822ae34d3",
+  "bytes": 1141577,
   "changes": [
-    "2 real-community-inspired frames",
-    "3 frame textures and labeled optional historical strip",
-    "7 frames total",
-    "Capability-first image-only share, including inside WeChat when supported",
-    "Separate website-link share",
-    "Original camera/forms retained",
-    "Stronger visible community textures and model-specific historical-strip geometry",
-    "Image-only direct-first share retained, including WeChat capability path",
-    "Local-only share diagnostics: payload/capability/error, no photo or identity",
-    "New visitor resets optional decorative choices"
+    "Removed U+2733 ornamental emoji that renders as a green square on iOS",
+    "Responsive nonoverlapping mobile sample cards and readable caption/origin text",
+    "Clarified framed-image share vs website-link share",
+    "Retained direct native file share, pre-rendered JPEG and PNG fallback",
+    "Preserved camera, frames, bilingual forms and other site paths"
   ],
-  "not_verified": [
-    "Physical WeChat/iPhone/Android targets",
-    "Actual Moments posting",
-    "Mainland venue connectivity"
-  ],
-  "baseline_sha256": "1d8af0393711853ce77e07578e4a7fece1c2fb7fdadae9f64bc26b503ed15b60",
-  "latest_checks": {
-    "functional": 22,
-    "render_cases": 84,
-    "theme_cases": 12,
-    "method": "Headless Chromium; Share interfaces mocked and mobile UA/viewports emulated. No physical device test."
-  }
+  "limitations": [
+    "Native share availability depends on host browser",
+    "Cannot compel WeChat friends or Moments as a file target or confirm delivery",
+    "Physical device verification remains required"
+  ]
 }
