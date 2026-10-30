@@ -1,0 +1,84 @@
+name: LingoTech community candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [release/lingotech-community-v4]
+    paths:
+      - tools/lingotech-community/**
+      - .github/workflows/lingotech-community.yml
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-community-candidate
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/lingotech-community-v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install build and browser dependencies
+        run: |
+          pip install gdown 'Pillow>=11,<13' pillow-heif playwright
+          python -m playwright install --with-deps chromium
+      - name: Build using verified original photography
+        run: python tools/lingotech-community/build.py
+      - name: Verify candidate in real Chromium without uploading any visitor data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          from PIL import Image
+          import json
+          root=Path('community-candidate');photo=root/'test-photo.png';Image.new('RGB',(900,600),'#8195b6').save(photo)
+          results=[];errors=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True)
+              page=browser.new_page(viewport={'width':390,'height':844},is_mobile=True,has_touch=True,user_agent='Mozilla/5.0 iPhone MicroMessenger/8.0')
+              page.on('pageerror',lambda e:errors.append(str(e)))
+              page.goto((root/'index.html').resolve().as_uri())
+              assert page.locator('[data-template]').count()==7
+              page.locator('#fileInput').set_input_files(str(photo))
+              page.wait_for_function('PhotoBoothQA.snapshot().ready')
+              for frame in ['build','crew','ideas','studio','night','friends','play']:
+                  page.locator('[data-template="'+frame+'"]').click()
+                  page.wait_for_function('PhotoBoothQA.snapshot().ready')
+                  s=page.evaluate('PhotoBoothQA.snapshot()');r=s['frame'];v=s['placement']
+                  assert v['x']>=r['x']-.1 and v['y']>=r['y']-.1 and v['x']+v['w']<=r['x']+r['w']+.1 and v['y']+v['h']<=r['y']+r['h']+.1
+              page.evaluate("() => {Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>true});Object.defineProperty(navigator,'share',{configurable:true,value:x=>{window.sent={keys:Object.keys(x),type:x.files?.[0]?.type,active:navigator.userActivation.isActive};return Promise.resolve();}});}")
+              page.locator('#wechatShare').click()
+              page.wait_for_function('!!window.sent')
+              assert page.evaluate('sent.keys')==['files'] and page.evaluate('sent.active')
+              page.keyboard.press('Escape')
+              page.locator('#clearBtn').click();page.locator('#tryPlay').click();page.wait_for_function('PhotoBoothQA.snapshot().ready')
+              assert page.evaluate('PhotoBoothQA.snapshot().demo')
+              page.locator('#memoryStrip').check();page.wait_for_function('PhotoBoothQA.snapshot().ready')
+              page.locator('#communityPaper').select_option('picnic');page.wait_for_function('PhotoBoothQA.snapshot().ready')
+              assert not page.evaluate('document.documentElement.scrollWidth>innerWidth')
+              page.screenshot(path=str(root/'candidate-mobile.png'),full_page=True)
+              assert not errors,errors
+              browser.close()
+          photo.unlink()
+          (root/'browser-check.json').write_text(json.dumps({'status':'PASS','checks':['7 templates preserve full photo','WeChat UA does not bypass supported file sharing','Image-only payload inside active user click','Historical sample remains labeled','Optional photo strip and patterned background','No mobile horizontal overflow','No uncaught errors'],'caveat':'Share API mocked; no real WeChat/iPhone device or posting claim'},indent=2))
+          PY
+      - name: Commit only project pages to release branch
+        run: |
+          cp community-candidate/index.html lingotech/index.html
+          cp community-candidate/index.html lingotech-photo-booth/index.html
+          cp community-candidate/release.json lingotech/release.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech-photo-booth/index.html lingotech/release.json
+          git commit -m 'Build LingoTech v4.0 community candidate: validated sources and direct-first sharing'
+          git push origin HEAD:release/lingotech-community-v4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-community-candidate
+          path: community-candidate/
+          retention-days: 7
