@@ -1,0 +1,66 @@
+name: LingoTech v4.5.2 deep audit
+on:
+  push:
+    branches: ['fix/lingotech-v452-deep-audit-20261031']
+    paths: ['lingotech/release452/**', '.github/workflows/lingotech-v452-verify.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-v452-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install three browsers and image decoders
+        run: |
+          pip install playwright==1.56.0 pillow==11.3.0 opencv-python-headless==4.12.0.88
+          python -m playwright install --with-deps chromium webkit firefox
+          sudo apt-get install -y fonts-noto-cjk fonts-dejavu-core
+      - name: Record reproducible findings on immutable v4.5.1 baseline
+        run: |
+          cp _archive/lingotech-photo-booth/v4.5.1-20261031/index.html lingotech/index.html
+          cp _archive/lingotech-photo-booth/v4.5.1-20261031/release.json lingotech/release.json
+          python lingotech/release452/test_deep.py --baseline
+      - name: Build candidate without changing original image assets
+        run: python lingotech/release452/build.py
+      - name: Three-browser deep regression, races, errors and QR compression matrix
+        run: python lingotech/release452/test_deep.py
+      - name: Previous editor, privacy and camera regression suites
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          scripts=['lingotech/release45/test_release.py','lingotech/release43/test_release.py','lingotech/release451/test_extra.py']
+          for rel in scripts:
+              p=Path(rel).resolve();s=p.read_text()
+              if '/release45/' in rel:s=s.replace("'4.5'","'4.5.2'").replace("'v4.5'","'v4.5.2'").replace("'LingoTech Photo Booth 4.5'","'LingoTech Photo Booth 4.5.2'")
+              elif '/release43/' in rel:s=s.replace('new_context(viewport=',"new_context(locale='zh-CN',viewport=")
+              else:s=s.replace('4.5.1','4.5.2')
+              exec(compile(s,str(p),'exec'),{'__file__':str(p),'__name__':'__main__'})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-v452-audit-evidence
+          retention-days: 30
+          path: |
+            lingotech/index.html
+            lingotech/release.json
+            lingotech/release452/
+            lingotech/release45/test-output/test-report.json
+            lingotech/release43/test-output/test-report.json
+            lingotech/release451/test-output/extra-report.json
+      - name: Commit verified assets to candidate branch only
+        if: success() && github.ref == 'refs/heads/fix/lingotech-v452-deep-audit-20261031'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech/release.json
+          git diff --cached --quiet || git commit -m 'Build verified v4.5.2 deep-audit repairs'
+          git push origin HEAD:fix/lingotech-v452-deep-audit-20261031
