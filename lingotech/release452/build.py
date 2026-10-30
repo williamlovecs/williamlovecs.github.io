@@ -69,7 +69,7 @@ function syncTexture452(){const supported=state.scene!=='build'&&['friends','pla
 let composing452=false;
 $('nickname').removeAttribute('maxlength');$('nickname').setAttribute('aria-describedby','nicknameLimit452');
 const nickCount452=document.createElement('small');nickCount452.id='nicknameLimit452';nickCount452.className='help';$('nickname').insertAdjacentElement('afterend',nickCount452);
-function syncNickname452(e){if(composing452||e?.isComposing)return;const input=$('nickname'),next=limitText(input.value,40);if(input.value!==next)input.value=next;state.nickname=next;nickCount452.textContent=graphemes452(next).length+' / 40';scheduleRender(true);}
+function syncNickname452(e){if(composing452||e?.isComposing)return;const input=$('nickname'),next=limitText(input.value,40),changed=state.nickname!==next;if(input.value!==next)input.value=next;state.nickname=next;nickCount452.textContent=graphemes452(next).length+' / 40';if(changed)scheduleRender(true);}
 $('nickname').oninput=syncNickname452;$('nickname').onblur=syncNickname452;
 $('nickname').addEventListener('compositionstart',()=>{composing452=true;});
 $('nickname').addEventListener('compositionend',()=>{composing452=false;syncNickname452();});
