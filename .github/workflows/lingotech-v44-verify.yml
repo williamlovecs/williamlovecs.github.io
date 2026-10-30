@@ -1,0 +1,47 @@
+name: LingoTech v4.4 QR regression
+on:
+  push:
+    branches: ['fix/lingotech-v44-branded-qr-20261030']
+    paths:
+      - 'lingotech/release44/**'
+      - '.github/workflows/lingotech-v44-verify.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser and QR verification requirements
+        run: |
+          pip install playwright==1.56.0 pillow==11.3.0 opencv-python-headless==4.12.0.88
+          python -m playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Build v4.3 baseline and exact-hash v4.4
+        run: |
+          node lingotech/release43/build.cjs
+          node lingotech/release44/build.cjs
+      - name: Full LingoTech regression
+        run: python lingotech/release43/test_release.py
+      - name: Scannability, layout isolation and opt-out tests
+        run: python lingotech/release44/test_qr.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-v44-qr-tests
+          path: |
+            lingotech/release43/test-output/
+            lingotech/release44/test-output/
+      - name: Commit tested public assets to feature branch
+        if: success() && github.ref == 'refs/heads/fix/lingotech-v44-branded-qr-20261030'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech-photo-booth/index.html lingotech/release.json
+          git diff --cached --quiet || git commit -m 'Publish verified v4.4 QR-enabled LingoTech pages to candidate branch'
+          git push origin HEAD:fix/lingotech-v44-branded-qr-20261030
