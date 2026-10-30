@@ -1,10 +1,60 @@
 {
-  "version": "3.2",
-  "html_commit": "38f6d755741faacffb16ea1f3a6cbda6d495597b",
-  "html_sha256": "117850026c51263740426d55e8a26db9d94c719ca659b62f773f835cc794184c",
-  "canonical_path": "/lingotech/",
-  "legacy_path": "/lingotech-photo-booth/",
-  "changes": ["Verified community and business form destinations", "WeChat save-first guidance with local JPEG preview", "JPG and lossless PNG export", "5 frames, original design preserved", "Camera cleanup, visitor identity reset, mobile controls"],
-  "checks": {"functional": 20, "render_cases": 60, "camera_flow": 9},
-  "verification_scope": "Chromium browser tests; Share and camera permission scenarios simulated. Feishu page titles checked without submitting forms. Physical WeChat/iOS/Android and mainland venue network remain unverified."
+  "version": "4.0",
+  "baseline_git_blob": "89fe59dd1ed110cb0223748b11873587eb507271",
+  "html_sha256": "1d8af0393711853ce77e07578e4a7fece1c2fb7fdadae9f64bc26b503ed15b60",
+  "bytes": 1131161,
+  "sources": [
+    {
+      "name": "IMG_0176.JPG",
+      "sha256": "529097fe141081e06c3dc098a67db02f1aa30050a2204621c8033a405d48e14e",
+      "original_px": [
+        6000,
+        4000
+      ],
+      "web_px": [
+        880,
+        587
+      ],
+      "web_bytes": 45164
+    },
+    {
+      "name": "112.HEIC",
+      "sha256": "88461883954bcc921944be7ade775c50f71c7b963cf7d5ae644916231a1e3c2e",
+      "original_px": [
+        4032,
+        3024
+      ],
+      "web_px": [
+        720,
+        540
+      ],
+      "web_bytes": 65400
+    },
+    {
+      "name": "IMG_1921.JPG",
+      "sha256": "babe08a537d814e57e117dfb98dcf417020dbac189bc84935be13cf909cec476",
+      "original_px": [
+        5544,
+        3696
+      ],
+      "web_px": [
+        600,
+        400
+      ],
+      "web_bytes": 27248
+    }
+  ],
+  "changes": [
+    "2 real-community-inspired frames",
+    "3 frame textures and labeled optional historical strip",
+    "7 frames total",
+    "Capability-first image-only share, including inside WeChat when supported",
+    "Separate website-link share",
+    "Original camera/forms retained"
+  ],
+  "not_verified": [
+    "Physical WeChat/iPhone/Android targets",
+    "Actual Moments posting",
+    "Mainland venue connectivity"
+  ]
 }
