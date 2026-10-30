@@ -8,40 +8,72 @@ on:
       - lingotech/release.json
 permissions:
   contents: read
+concurrency:
+  group: lingotech-live-verification
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Check both deployed URLs against the release manifest, no form submissions
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser navigation verifier
+        run: |
+          pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Verify current live release bytes and legacy browser redirect
         run: |
           python - <<'PY'
           import urllib.request,hashlib,time,json
           from pathlib import Path
+          from playwright.sync_api import sync_playwright
           manifest=json.loads(Path('lingotech/release.json').read_text())
-          expected=manifest['html_sha256']
-          urls=['https://williamlovecs.github.io/lingotech/','https://williamlovecs.github.io/lingotech-photo-booth/']
+          canonical=manifest.get('canonical','https://williamlovecs.github.io/lingotech/')
+          legacy=manifest.get('legacy','https://williamlovecs.github.io/lingotech-photo-booth/')
+          expected=manifest.get('sha256',manifest.get('html_sha256'))
+          assert expected
+          urls=[(canonical,expected),(legacy,manifest.get('legacy_sha256',expected))]
           results=[]
-          for url in urls:
+          for url,target in urls:
               item={'url':url,'verified':False,'release':manifest['version']}
-              for attempt in range(18):
+              for attempt in range(36):
                   try:
                       req=urllib.request.Request(url,headers={'User-Agent':'LingoTech-release-check','Cache-Control':'no-cache'})
                       with urllib.request.urlopen(req,timeout=12) as r:
                           data=r.read();item.update(httpStatus=r.status,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
-                      item['verified']=item['sha256']==expected
+                      item['verified']=item['sha256']==target
                       if item['verified']:break
                   except Exception as e:item['error']=str(e)[:220]
                   time.sleep(5)
               results.append(item)
-          Path('public-site-verification.json').write_text(json.dumps(results,indent=2))
-          print(json.dumps(results,indent=2))
-          assert all(x['verified'] for x in results),'Public site did not return expected bytes'
+          report={'version':manifest['version'],'httpChecks':results,'browserChecks':[],'formSubmissions':0,'realDeviceWeChat':'not tested'}
+          Path('public-site-verification.json').write_text(json.dumps(report,indent=2))
+          assert all(x['verified'] for x in results),results
+          with sync_playwright() as p:
+              browser=p.chromium.launch()
+              for start in [canonical,legacy,legacy+'?v=old&utm_source=printed']:
+                  page=browser.new_page(locale='en-US')
+                  errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+                  page.goto(start,wait_until='load')
+                  page.wait_for_function('window.LingoTechQA45',timeout=30000)
+                  assert page.url==canonical,page.url
+                  version=page.locator('meta[name="app-version"]').get_attribute('content')
+                  assert version==manifest['version']
+                  assert page.locator('#homeJoin45').is_visible()
+                  assert not errors,errors
+                  report['browserChecks'].append({'start':start,'finalUrl':page.url,'version':version,'eventEntryVisible':True,'pageErrors':errors})
+                  page.close()
+              browser.close()
+          report['status']='passed'
+          Path('public-site-verification.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lingotech-public-site-verification
-          retention-days: 7
+          retention-days: 14
           path: public-site-verification.json

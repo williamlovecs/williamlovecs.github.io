@@ -1,0 +1,18 @@
+{
+  "version": "4.4",
+  "baseline_version": "4.3",
+  "html_sha256": "fca15ade3bae056e30a3ae12006befc989f2d91a3d7848de62f1d766edc842dc",
+  "bytes": 1188471,
+  "canonical": "https://williamlovecs.github.io/lingotech/",
+  "qr_destination": "https://williamlovecs.github.io/lingotech/",
+  "changes": [
+    "Scannable branded QR integrated into every frame and ratio, with no photo/face overlap",
+    "Separate reserved text and QR zones, including the historical photo memory strip",
+    "Default-on opt-out checkbox; QR appears in both preview and saved/shared JPG/PNG",
+    "Bilingual scan-to-create CTA; clean canonical URL without user-specific tracking",
+    "Preserve scene and frame editor, public URL, sharing fallbacks, and privacy"
+  ],
+  "limitations": [
+    "Physical iPhone/WeChat delivery and long-press recognition still require device verification"
+  ]
+}
