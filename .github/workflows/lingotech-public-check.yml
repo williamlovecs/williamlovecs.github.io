@@ -14,66 +14,83 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install browser navigation verifier
+      - name: Install browser and live-export verifier
         run: |
-          pip install playwright==1.56.0
+          pip install playwright==1.56.0 pillow==11.3.0 opencv-python-headless==4.12.0.88
           python -m playwright install --with-deps chromium
-      - name: Verify current live release bytes and legacy browser redirect
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Verify public bytes, clean navigation, live export and real QR payload
         run: |
           python - <<'PY'
-          import urllib.request,hashlib,time,json
+          import urllib.request,hashlib,time,json,io
           from pathlib import Path
+          from PIL import Image,ImageDraw
           from playwright.sync_api import sync_playwright
+          import cv2
           manifest=json.loads(Path('lingotech/release.json').read_text())
-          canonical=manifest.get('canonical','https://williamlovecs.github.io/lingotech/')
-          legacy=manifest.get('legacy','https://williamlovecs.github.io/lingotech-photo-booth/')
-          expected=manifest.get('sha256',manifest.get('html_sha256'))
-          assert expected
-          urls=[(canonical,expected),(legacy,manifest.get('legacy_sha256',expected))]
-          results=[]
-          for url,target in urls:
-              item={'url':url,'verified':False,'release':manifest['version']}
-              for attempt in range(36):
-                  try:
-                      req=urllib.request.Request(url,headers={'User-Agent':'LingoTech-release-check','Cache-Control':'no-cache'})
-                      with urllib.request.urlopen(req,timeout=12) as r:
-                          data=r.read();item.update(httpStatus=r.status,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
-                      item['verified']=item['sha256']==target
-                      if item['verified']:break
-                  except Exception as e:item['error']=str(e)[:220]
-                  time.sleep(5)
-              results.append(item)
-          report={'version':manifest['version'],'httpChecks':results,'browserChecks':[],'formSubmissions':0,'realDeviceWeChat':'not tested'}
-          Path('public-site-verification.json').write_text(json.dumps(report,indent=2))
-          assert all(x['verified'] for x in results),results
-          with sync_playwright() as p:
-              browser=p.chromium.launch()
-              for start in [canonical,legacy,legacy+'?v=old&utm_source=printed']:
-                  page=browser.new_page(locale='en-US')
-                  errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-                  page.goto(start,wait_until='load')
-                  page.wait_for_function('window.LingoTechQA45',timeout=30000)
-                  assert page.url==canonical,page.url
-                  version=page.locator('meta[name="app-version"]').get_attribute('content')
-                  assert version==manifest['version']
-                  assert page.locator('#homeJoin45').is_visible()
-                  assert not errors,errors
-                  report['browserChecks'].append({'start':start,'finalUrl':page.url,'version':version,'eventEntryVisible':True,'pageErrors':errors})
-                  page.close()
-              browser.close()
-          report['status']='passed'
-          Path('public-site-verification.json').write_text(json.dumps(report,indent=2))
-          print(json.dumps(report,indent=2))
+          canonical=manifest['canonical'];legacy=manifest['legacy'];expected=manifest['sha256']
+          urls=[(canonical,expected),(legacy,manifest['legacy_sha256'])]
+          report={'version':manifest['version'],'httpChecks':[],'browserChecks':[],'liveExportChecks':[],'formSubmissions':0,'socialPosts':0,'realDeviceWeChat':'not tested','mainlandChinaNetwork':'not tested'}
+          def save():Path('public-site-verification.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          try:
+              for url,target in urls:
+                  item={'url':url,'verified':False}
+                  for attempt in range(36):
+                      try:
+                          req=urllib.request.Request(url,headers={'User-Agent':'LingoTech-release-check','Cache-Control':'no-cache'})
+                          with urllib.request.urlopen(req,timeout=12) as r:
+                              data=r.read();item.update(httpStatus=r.status,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+                          item['verified']=item['sha256']==target
+                          if item['verified']:break
+                      except Exception as e:item['error']=str(e)[:220]
+                      time.sleep(5)
+                  report['httpChecks'].append(item);save()
+              assert all(x['verified'] for x in report['httpChecks']),report['httpChecks']
+              im=Image.new('RGB',(1200,800),'#dfebf5');d=ImageDraw.Draw(im);d.rectangle((20,20,160,160),fill='red');d.text((240,360),'SYNTHETIC LIVE EXPORT CHECK',fill='black');buf=io.BytesIO();im.save(buf,format='PNG')
+              with sync_playwright() as p:
+                  browser=p.chromium.launch()
+                  starts=[canonical,legacy,legacy+'?v=old&utm_source=printed',canonical+'index.html?utm_source=chatgpt.com&fbclid=example#editor',canonical+'?gclid=example']
+                  for start in starts:
+                      page=browser.new_page(locale='en-US',viewport={'width':390,'height':844},accept_downloads=True)
+                      errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+                      page.goto(start,wait_until='load');page.wait_for_function('window.LingoTechQA452',timeout=30000)
+                      assert page.url==canonical,page.url
+                      version=page.locator('meta[name="app-version"]').get_attribute('content');assert version==manifest['version']
+                      assert page.locator('link[rel=canonical]').count()==1
+                      assert page.locator('#homeJoin45').is_visible()
+                      if start==canonical:
+                          page.screenshot(path='live-home-mobile.png',full_page=True)
+                          page.locator('#fileInput').set_input_files({'name':'synthetic-live.png','mimeType':'image/png','buffer':buf.getvalue()})
+                          page.wait_for_function('PhotoBoothQA.snapshot().ready',timeout=20000)
+                          for ratio in ['post','story','landscape']:
+                              page.locator('[data-ratio='+ratio+']').click();page.wait_for_function('PhotoBoothQA.snapshot().ready',timeout=20000)
+                              page.locator('#previewBtn').click();page.wait_for_function('document.querySelector("#resultImage").naturalWidth>0')
+                              with page.expect_download() as download:page.locator('#modalDownload').click()
+                              out=Path('live-export-'+ratio+'.jpg');download.value.save_as(out)
+                              decoded=cv2.QRCodeDetector().detectAndDecode(cv2.imread(str(out)))[0];assert decoded==canonical,(ratio,decoded)
+                              report['liveExportChecks'].append({'ratio':ratio,'format':'JPEG','qr':decoded,'bytes':out.stat().st_size})
+                              page.locator('#closeExport').click()
+                          page.screenshot(path='live-editor-mobile.png',full_page=True)
+                          page.locator('#clearBtn').click();assert page.evaluate('PhotoBoothQA.snapshot().sourceState')=='empty'
+                      assert not errors,errors
+                      report['browserChecks'].append({'start':start,'finalUrl':page.url,'version':version,'eventEntryVisible':True,'pageErrors':errors});save();page.close()
+                  browser.close()
+              report['status']='passed';save();print(json.dumps(report,ensure_ascii=False,indent=2))
+          except Exception as e:
+              report['status']='failed';report['error']=str(e);save();raise
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lingotech-public-site-verification
-          retention-days: 14
-          path: public-site-verification.json
+          retention-days: 30
+          path: |
+            public-site-verification.json
+            live-*.png
+            live-export-*.jpg
