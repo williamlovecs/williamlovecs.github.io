@@ -73,7 +73,7 @@ try:
     for ratio in ('post','story','landscape'):
      page.locator(f'[data-ratio="{ratio}"]').click();ready(page)
      data=page.locator('#poster').evaluate('(c)=>c.toDataURL("image/png").split(",")[1]');path=OUT/f'{engine}-{ratio}.png';path.write_bytes(base64.b64decode(data));decode(path)
-     small=Image.open(path);small=small.resize((720,round(small.height*720/small.width)));p=OUT/f'{engine}-{ratio}-720.jpg';small.save(p,quality=80);decode(p)
+     small=Image.open(path).convert('RGB');small=small.resize((720,round(small.height*720/small.width)));p=OUT/f'{engine}-{ratio}-720.jpg';small.save(p,quality=80);decode(p)
     ok('real QR decoded at native resolution and 720px JPEG for all ratios')
     page.locator('#previewBtn').click();page.wait_for_function('document.querySelector("#resultImage").naturalWidth>0')
     assert page.locator('#exportJoin45').is_visible()
