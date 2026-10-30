@@ -1,19 +1,20 @@
 {
-  "version": "4.2",
-  "baseline_version": "4.1",
-  "baseline_html_sha256": "c6c29e63fc443e63631072b39b76cf736c275d7fd7512ae1ad0ff9442947645c",
-  "html_sha256": "c4ab6ed46d72c97a4810d3e13f428dcff56cea993ae48199fff2235822ae34d3",
-  "bytes": 1141577,
+  "version": "4.3",
+  "baseline_version": "4.2",
+  "html_sha256": "38f4517e1aa2ed75a1324844c1de4f903773eb08dbe3c4e51f2ef8b83bfd59d0",
+  "bytes": 1183510,
+  "canonical": "https://williamlovecs.github.io/lingotech/",
   "changes": [
-    "Removed U+2733 ornamental emoji that renders as a green square on iOS",
-    "Responsive nonoverlapping mobile sample cards and readable caption/origin text",
-    "Clarified framed-image share vs website-link share",
-    "Retained direct native file share, pre-rendered JPEG and PNG fallback",
-    "Preserved camera, frames, bilingual forms and other site paths"
+    "Separate creative scenes from frame layouts; preserve owned photos and personal text",
+    "Replace hero images with IMG_8240 and the existing LingoCorner high-five asset; five unique photos",
+    "Measured text boxes and dedicated safe areas across seven layouts and three ratios",
+    "Remove all star/sparkle decorations from preview and export",
+    "Responsive canvas containment; no fixed-height clipping",
+    "Keep native files-only JPG/PNG sharing and honest fallback",
+    "Remove UTM and version query parameters without changing the canonical URL",
+    "Explicit 40-character personal text; prevent magazine side-label overlap; redraw on language change"
   ],
   "limitations": [
-    "Native share availability depends on host browser",
-    "Cannot compel WeChat friends or Moments as a file target or confirm delivery",
-    "Physical device verification remains required"
+    "Browser share targets and actual WeChat delivery require physical-device confirmation"
   ]
 }
