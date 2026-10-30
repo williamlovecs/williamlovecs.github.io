@@ -1,0 +1,10 @@
+{
+  "version": "3.2",
+  "html_commit": "38f6d755741faacffb16ea1f3a6cbda6d495597b",
+  "html_sha256": "117850026c51263740426d55e8a26db9d94c719ca659b62f773f835cc794184c",
+  "canonical_path": "/lingotech/",
+  "legacy_path": "/lingotech-photo-booth/",
+  "changes": ["Verified community and business form destinations", "WeChat save-first guidance with local JPEG preview", "JPG and lossless PNG export", "5 frames, original design preserved", "Camera cleanup, visitor identity reset, mobile controls"],
+  "checks": {"functional": 20, "render_cases": 60, "camera_flow": 9},
+  "verification_scope": "Chromium browser tests; Share and camera permission scenarios simulated. Feishu page titles checked without submitting forms. Physical WeChat/iOS/Android and mainland venue network remain unverified."
+}
