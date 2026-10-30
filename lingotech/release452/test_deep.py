@@ -54,7 +54,8 @@ try:
      rows.append(row);ctx.close();(OUT/'report.json').write_text(json.dumps(REPORT,ensure_ascii=False,indent=2));print(engine,name,row['status'],flush=True)
    def clean_url(p):
     p.goto(URL+'index.html?utm_source=chatgpt.com&fbclid=example&v=old#editor');p.wait_for_function('window.LingoTechQA45');assert p.url==URL,p.url
-    p.goto(URL+'?lang=en&kiosk=1&gclid=example');p.wait_for_function('window.LingoTechQA45');assert p.url==URL,p.url;assert p.evaluate('LingoTechQA45.snapshot().kiosk');assert p.evaluate('LingoTechQA45.snapshot().language')=='en'
+    p.goto(URL+'?lang=en&kiosk=0&gclid=example');p.wait_for_function('window.LingoTechQA45');assert p.url==URL,p.url;assert not p.evaluate('LingoTechQA45.snapshot().kiosk');assert p.evaluate('LingoTechQA45.snapshot().language')=='en'
+    p.goto(URL+'?kiosk=1');p.wait_for_function('window.LingoTechQA45');assert p.url==URL and p.evaluate('LingoTechQA45.snapshot().kiosk');assert p.evaluate('LingoTechQA45.snapshot().language')=='zh'  # New shared-device visitors use browser language, not a previous visitor preference.
    case('clean-url',clean_url)
    def empty_form(p):
     p.locator('#setupBtn').click();p.locator('#joinInput').fill('');p.locator('#partnerInput').fill('');p.locator('#formsVerified').check();p.locator('#applyConfig').click();p.locator('#formsBtn').click()
@@ -116,8 +117,8 @@ try:
    case('native-share-state-machine',native_share)
    def delayed_import(p):
     load(p);personal(p);p.locator('#nickname').fill('PRIVATE_SENTINEL');ready(p)
-    p.evaluate("()=>{const old=window.createImageBitmap;window.__holdOne=true;window.createImageBitmap=async(...a)=>{const im=await old(...a);if(__holdOne){__holdOne=false;return await new Promise(r=>window.__releaseBitmap=()=>r(im));}return im;};}")
-    p.locator('#fileInput').set_input_files(str(A));p.wait_for_function('window.__releaseBitmap');p.locator('#cancelLoad').click();ready(p);assert snap(p)['nickname']=='PRIVATE_SENTINEL'
+    p.evaluate("()=>{const old=window.createImageBitmap.bind(window);window.__holdOne=true;window.createImageBitmap=async(...a)=>{const im=await old(...a);if(__holdOne){__holdOne=false;return await new Promise(r=>window.__releaseBitmap=()=>r(im));}return im;};}")
+    p.locator('#fileInput').set_input_files(str(A));p.wait_for_function("typeof window.__releaseBitmap === 'function'");p.locator('#cancelLoad').click();ready(p);assert snap(p)['nickname']=='PRIVATE_SENTINEL'
     p.locator('#fileInput').set_input_files(str(B));ready(p);assert snap(p)['photo']=={'width':500,'height':1000};p.evaluate('__releaseBitmap()');p.wait_for_timeout(150);assert snap(p)['photo']=={'width':500,'height':1000};assert snap(p)['nickname']==''
     p.locator('#clearBtn').click();assert not p.evaluate('LingoTechQA45.snapshot().hasExport');assert not p.evaluate('LingoTechQA45.snapshot().hasDataUrl');assert 'PRIVATE_SENTINEL' not in p.evaluate('JSON.stringify({...localStorage})')
    case('cancelled-import-cannot-resurrect',delayed_import)
@@ -128,10 +129,10 @@ try:
    case('exif-rotation-and-invalid-file',exif)
    def privacy_idle(p):
     p.goto(URL+'?kiosk=1');p.wait_for_function('window.LingoTechQA45');load(p);personal(p);p.locator('#nickname').fill('PRIVATE_IDLE');ready(p)
-    p.evaluate('LingoTechQA45.checkIdleAt(Date.now()+161000)');expect(p.locator('#idleWarning45')).to_be_visible();p.locator('#keepSession45').click();assert snap(p)['own']
-    p.evaluate('LingoTechQA45.checkIdleAt(Date.now()+181000)');assert snap(p)['sourceState']=='empty' and snap(p)['nickname']==''
+    p.clock.fast_forward(161000);expect(p.locator('#idleWarning45')).to_be_visible();p.locator('#keepSession45').click();assert snap(p)['own']
+    p.clock.fast_forward(181000);assert snap(p)['sourceState']=='empty' and snap(p)['nickname']==''
     assert p.evaluate('LingoTechQA45.snapshot().qr');assert not p.evaluate('LingoTechQA45.snapshot().hasExport');assert not p.locator('#resultImage').get_attribute('src')
-   case('shared-device-idle-clear',privacy_idle)
+   case('shared-device-idle-clear',privacy_idle,clock=True)
    def form_safety(p):
     p.locator('#setupBtn').click();p.locator('#joinInput').fill('javascript:alert(1)');p.locator('#applyConfig').click();expect(p.locator('#setupError')).to_be_visible();assert p.locator('#setupModal').is_visible()
     p.locator('#joinInput').fill('https://user:password@example.com/');p.locator('#applyConfig').click();expect(p.locator('#setupError')).to_be_visible();p.locator('#closeSetup').click()
@@ -164,7 +165,6 @@ try:
         assert decode(stream.getvalue())==DEST,(scene,frame,ratio,strip,'720 JPEG')
         success+=2
     return {'qr_decodes':success,'sizes':'original PNG and 720px JPEG at quality 80'}
-   # Baseline receives the focused probes; full decoder matrix is the release gate.
    if not args.baseline:case('qr-every-scene-frame-ratio-strip',qr_matrix)
    browser.close()
  REPORT['failed_count']=len(failures);REPORT['status']='findings' if failures else 'passed';REPORT['failures']=failures
