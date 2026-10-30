@@ -1,0 +1,35 @@
+name: LingoTech v4.3 verification
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build static pages
+        run: node lingotech/release43/build.cjs
+      - name: Install browser test dependencies
+        run: |
+          pip install playwright==1.56.0 pillow==11.3.0
+          python -m playwright install --with-deps chromium webkit
+      - name: Browser regression suite
+        run: python lingotech/release43/test_release.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-v43-verification
+          path: lingotech/release43/test-output/
+      - name: Commit verified generated pages to repair branch only
+        if: success() && github.ref == 'refs/heads/fix/lingotech-v43-20261030'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech-photo-booth/index.html lingotech/release.json
+          git diff --cached --quiet || git commit -m 'Build verified LingoTech v4.3 static pages'
+          git push origin HEAD:fix/lingotech-v43-20261030
