@@ -1,0 +1,36 @@
+name: LingoTech form destination check
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/lingotech-form-check.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Prepare isolated browser
+        run: |
+          mkdir -p /tmp/lt-probe
+          npm install --prefix /tmp/lt-probe playwright@1.56.1
+          node /tmp/lt-probe/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Read public form titles without submitting or collecting responses
+        run: |
+          cat > /tmp/lt-probe/check.cjs <<'JS'
+          const {chromium}=require('playwright');
+          const fs=require('fs');
+          (async()=>{const browser=await chromium.launch({headless:true});const results=[];
+          for(const url of ['https://ncncpg6l01bx.feishu.cn/share/base/shrcn82W1jQAbhkUiAYgD7xVfTd','https://ncncpg6l01bx.feishu.cn/share/base/shrcnZix9z8F9hvu5z0Oxnye0xc']){
+            const page=await browser.newPage();const item={url};
+            try{const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:25000});item.httpStatus=response?.status();await page.waitForTimeout(10000);item.title=await page.title();const text=await page.locator('body').innerText({timeout:5000});item.communityMatch=/Join LingoTech|加入 LingoTech/.test(text);item.businessMatch=/商务与生态合作|合作意向登记/.test(text);item.loginRequired=/扫码登录|请登录后|Log in to continue/.test(text);item.knownHeadings=['Join LingoTech','商务与生态合作','合作意向登记'].filter(s=>text.includes(s));item.finalUrl=page.url();}catch(e){item.error=String(e).slice(0,250);}
+            results.push(item);await page.close();
+          }await browser.close();fs.writeFileSync('form-destinations.json',JSON.stringify(results,null,2));console.log(JSON.stringify(results,null,2));})();
+          JS
+          node /tmp/lt-probe/check.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lingotech-form-verification
+          path: form-destinations.json
+          retention-days: 3
