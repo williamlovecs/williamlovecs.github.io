@@ -1,0 +1,65 @@
+name: LingoTech verified repair release
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/lingotech-release/**
+      - .github/workflows/lingotech-release.yml
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-repair-release
+  cancel-in-progress: false
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Restore exact verified form data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zlib,hashlib
+          root=Path('tools/lingotech-release')
+          data=zlib.decompress((root/'forms.json.zlib').read_bytes())
+          assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()=='50bb5ab6204d23b70826dca79c4d1b7ecdec8be4'
+          (root/'forms.json').write_bytes(data)
+          PY
+      - name: Apply tested patch with baseline guard
+        run: python tools/lingotech-release/patch.py
+      - name: Verify exact tested bytes and unchanged unrelated pages
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,subprocess,json
+          expected='117850026c51263740426d55e8a26db9d94c719ca659b62f773f835cc794184c'
+          targets=['lingotech/index.html','lingotech-photo-booth/index.html']
+          hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in targets}
+          assert all(s==expected for s in hashes.values()),hashes
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed.issubset(set(targets)),changed
+          result={'version':'3.2','sha256':hashes,'changed':sorted(changed),'forms':'Verified public titles; no submissions','tests':{'functional_checks':20,'render_cases':60,'camera_flow_checks':9,'physical_devices':'Not tested'}}
+          Path('release-evidence.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Commit only the two repaired site files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech-photo-booth/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Release LingoTech v3.2: verified forms, WeChat save flow and camera repairs'
+            git push origin HEAD:main
+          fi
+          git rev-parse HEAD > release-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lingotech-v32-release-verification
+          retention-days: 7
+          path: |
+            release-evidence.json
+            release-commit.txt
