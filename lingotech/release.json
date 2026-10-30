@@ -1,8 +1,8 @@
 {
-  "version": "4.0",
+  "version": "4.1",
   "baseline_git_blob": "89fe59dd1ed110cb0223748b11873587eb507271",
-  "html_sha256": "1d8af0393711853ce77e07578e4a7fece1c2fb7fdadae9f64bc26b503ed15b60",
-  "bytes": 1131161,
+  "html_sha256": "c6c29e63fc443e63631072b39b76cf736c275d7fd7512ae1ad0ff9442947645c",
+  "bytes": 1139635,
   "sources": [
     {
       "name": "IMG_0176.JPG",
@@ -50,11 +50,22 @@
     "7 frames total",
     "Capability-first image-only share, including inside WeChat when supported",
     "Separate website-link share",
-    "Original camera/forms retained"
+    "Original camera/forms retained",
+    "Stronger visible community textures and model-specific historical-strip geometry",
+    "Image-only direct-first share retained, including WeChat capability path",
+    "Local-only share diagnostics: payload/capability/error, no photo or identity",
+    "New visitor resets optional decorative choices"
   ],
   "not_verified": [
     "Physical WeChat/iPhone/Android targets",
     "Actual Moments posting",
     "Mainland venue connectivity"
-  ]
+  ],
+  "baseline_sha256": "1d8af0393711853ce77e07578e4a7fece1c2fb7fdadae9f64bc26b503ed15b60",
+  "latest_checks": {
+    "functional": 22,
+    "render_cases": 84,
+    "theme_cases": 12,
+    "method": "Headless Chromium; Share interfaces mocked and mobile UA/viewports emulated. No physical device test."
+  }
 }
