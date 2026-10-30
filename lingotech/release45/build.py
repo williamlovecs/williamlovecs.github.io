@@ -9,7 +9,7 @@ assert blob == '1382aacc30c32daab42354d0322e9a875f0f4c24', 'Unexpected baseline;
 s = b.decode('utf-8')
 marker = 'translate();scheduleRender(true);\n})();'
 assert s.count(marker)==1
-patch=(Path(__file__).parent/'upgrade.js').read_text()
+patch=(Path(__file__).parent/'qr-resilience.js').read_text()+'\n'+(Path(__file__).parent/'upgrade.js').read_text()+'\nwindow.LingoTechQA45.qrGeometry=qr44Geometry;\n'
 s=s.replace(marker,patch+'\n'+marker)
 s=s.replace('<!-- LingoTech release v4.4 shareable photos with scannable QR -->','<!-- LingoTech release v4.5 unified entry and shared-device privacy -->')
 s=s.replace('<title>LingoTech Photo Booth</title>','<title>LingoTech Photo Booth</title>\n<link rel="canonical" href="https://williamlovecs.github.io/lingotech/">\n<meta name="app-version" content="4.5">')
@@ -25,6 +25,6 @@ legacy='''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=
 (ROOT/'lingotech-photo-booth').mkdir(exist_ok=True)
 (ROOT/'lingotech-photo-booth/index.html').write_text(legacy,encoding='utf-8')
 sha=lambda x:hashlib.sha256(x).hexdigest()
-release={'version':'4.5','canonical':'https://williamlovecs.github.io/lingotech/','legacy':'https://williamlovecs.github.io/lingotech-photo-booth/','legacy_behavior':'client-side redirect with meta-refresh and link fallback','baseline_commit':'af1be693e9893a697e0be181ca93a3b6b1a54132','archive':'_archive/lingotech-photo-booth/v4.4-20261030/index.html','archive_git_blob':blob,'sha256':sha(s.encode()),'legacy_sha256':sha(legacy.encode()),'changes':['optional event CTA','full visitor reset including QR toggle','opt-in tab-only kiosk with 3-minute idle clear','automatic zh/en with remembered manual preference','opt-in anonymous local action totals; no collector'], 'analytics':'local only; no site-wide reporting', 'physical_wechat_acceptance':'requires real-device testing'}
+release={'version':'4.5','canonical':'https://williamlovecs.github.io/lingotech/','legacy':'https://williamlovecs.github.io/lingotech-photo-booth/','legacy_behavior':'client-side redirect with meta-refresh and link fallback','baseline_commit':'af1be693e9893a697e0be181ca93a3b6b1a54132','archive':'_archive/lingotech-photo-booth/v4.4-20261030/index.html','archive_git_blob':blob,'sha256':sha(s.encode()),'legacy_sha256':sha(legacy.encode()),'changes':['optional event CTA','full visitor reset including QR toggle','opt-in tab-only kiosk with 3-minute idle clear','automatic zh/en with remembered manual preference','opt-in anonymous local action totals; no collector','larger landscape QR for compressed sharing'], 'analytics':'local only; no site-wide reporting', 'physical_wechat_acceptance':'requires real-device testing'}
 (ROOT/'lingotech/release.json').write_text(json.dumps(release,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps(release,ensure_ascii=False,indent=2))
