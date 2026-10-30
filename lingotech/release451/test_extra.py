@@ -21,13 +21,13 @@ try:
     page.goto(URL);page.wait_for_function('window.LingoTechQA451');assert page.locator('link[rel=canonical]').count()==1
     assert page.locator('meta[property="og:image"]').get_attribute('content').endswith('/og-v451.png');assert (ROOT/'lingotech/og-v451.png').stat().st_size>1000
     row['checks'].append('one canonical, correct social preview metadata')
-    page.evaluate("navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('denied','NotAllowedError')}")
+    page.evaluate("() => { navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('denied','NotAllowedError')}; }")
     page.locator('#cameraBtn').click();page.wait_for_function("document.querySelector('#cameraWait').innerText.includes('权限')")
     assert page.locator('#fallbackCamera').is_visible() and not page.evaluate('LingoTechQA45.snapshot().cameraActive')
     assert page.locator('#liveCamera').evaluate('e=>getComputedStyle(e).objectFit')=='contain'
     page.locator('#closeCamera').click();row['checks'].append('denied camera handled; full-frame preview CSS; fallback visible')
-    page.evaluate("window.__stopped=0;navigator.mediaDevices.getUserMedia=()=>new Promise(r=>window.__grant=r)")
-    page.locator('#cameraBtn').click();page.locator('#closeCamera').click();page.evaluate("__grant({getTracks:()=>[{stop:()=>__stopped++}]})")
+    page.evaluate("() => { window.__stopped=0;navigator.mediaDevices.getUserMedia=()=>new Promise(r=>window.__grant=r); }")
+    page.locator('#cameraBtn').click();page.locator('#closeCamera').click();page.evaluate("() => { __grant({getTracks:()=>[{stop:()=>__stopped++}]}); }")
     page.wait_for_function('__stopped===1');assert page.locator('#cameraModal').is_hidden() and not page.evaluate('LingoTechQA45.snapshot().cameraActive')
     row['checks'].append('late camera authorization after close stops tracks')
     page.locator('#fileInput').set_input_files({'name':'not-a-photo.png','mimeType':'image/png','buffer':b'not an image'})
