@@ -1,12 +1,12 @@
 {
-  "version": "4.5.1",
+  "version": "4.5.2",
   "canonical": "https://williamlovecs.github.io/lingotech/",
   "legacy": "https://williamlovecs.github.io/lingotech-photo-booth/",
   "legacy_behavior": "client-side redirect with meta-refresh and link fallback",
-  "baseline_commit": "f71deda492bdc0c2a30e6b2d940d715233b354bd",
+  "baseline_commit": "6c59267b06c49982052ee50c128aeb57e126c0fb",
   "archive": "_archive/lingotech-photo-booth/v4.4-20261030/index.html",
   "archive_git_blob": "1382aacc30c32daab42354d0322e9a875f0f4c24",
-  "sha256": "3f44a0d1c5653ddf6fc35795fca709f5d5424ae33b75be5acbc4a5a4d24033b5",
+  "sha256": "53fcdcbfd6ca0db54d4c427ca713826c6af7b2e539b1f70472576d480396392f",
   "legacy_sha256": "334e9d3b07874d9254cdeb635ddf97e2170dd0c41ed740e9d0b9e327883864df",
   "changes": [
     "optional event CTA",
@@ -17,10 +17,18 @@
     "larger landscape QR for compressed sharing",
     "one canonical and social preview metadata",
     "full-frame live camera preview matches capture",
-    "event form labels no longer imply automatic community membership"
+    "event form labels no longer imply automatic community membership",
+    "no inert texture selector for fixed-style frames",
+    "empty forms no longer link back to this page",
+    "stable form DOM during rerenders",
+    "40 visible-character limit with IME support",
+    "recover unreturned native shares",
+    "retry failed image export",
+    "clean index.html and all query parameters",
+    "responsive action bar spacing"
   ],
   "analytics": "local only; no site-wide reporting",
   "physical_wechat_acceptance": "requires real-device testing",
-  "previous_release_archive": "_archive/lingotech-photo-booth/v4.5-20261031/index.html",
+  "previous_release_archive": "_archive/lingotech-photo-booth/v4.5.1-20261031/index.html",
   "social_preview_sha256": "77661ff57ea091ff6776fb0a9ad8aa3d52457924642df42148a73f0979957639"
 }
