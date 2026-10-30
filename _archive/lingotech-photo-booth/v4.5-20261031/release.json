@@ -1,0 +1,21 @@
+{
+  "version": "4.5",
+  "canonical": "https://williamlovecs.github.io/lingotech/",
+  "legacy": "https://williamlovecs.github.io/lingotech-photo-booth/",
+  "legacy_behavior": "client-side redirect with meta-refresh and link fallback",
+  "baseline_commit": "af1be693e9893a697e0be181ca93a3b6b1a54132",
+  "archive": "_archive/lingotech-photo-booth/v4.4-20261030/index.html",
+  "archive_git_blob": "1382aacc30c32daab42354d0322e9a875f0f4c24",
+  "sha256": "669c33c2c8586b2465e8121292ac07d1379115c043c8b91b8768533d957f80e5",
+  "legacy_sha256": "334e9d3b07874d9254cdeb635ddf97e2170dd0c41ed740e9d0b9e327883864df",
+  "changes": [
+    "optional event CTA",
+    "full visitor reset including QR toggle",
+    "opt-in tab-only kiosk with 3-minute idle clear",
+    "automatic zh/en with remembered manual preference",
+    "opt-in anonymous local action totals; no collector",
+    "larger landscape QR for compressed sharing"
+  ],
+  "analytics": "local only; no site-wide reporting",
+  "physical_wechat_acceptance": "requires real-device testing"
+}

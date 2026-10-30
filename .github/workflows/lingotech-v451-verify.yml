@@ -1,0 +1,66 @@
+name: LingoTech v4.5.1 final regression
+on:
+  push:
+    branches: ['fix/lingotech-v451-final-qa-20261031']
+    paths: ['lingotech/release451/**', '.github/workflows/lingotech-v451-verify.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-v451-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser, font and QR dependencies
+        run: |
+          pip install playwright==1.56.0 pillow==11.3.0 opencv-python-headless==4.12.0.88
+          python -m playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk fonts-dejavu-core
+      - name: Build from archived exact v4.5 source
+        run: python lingotech/release451/build.py
+      - name: Existing v4.5 user flow, layout, privacy and QR regression
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('lingotech/release45/test_release.py').resolve()
+          s=p.read_text().replace("'4.5'", "'4.5.1'").replace("'v4.5'", "'v4.5.1'").replace("'LingoTech Photo Booth 4.5'", "'LingoTech Photo Booth 4.5.1'")
+          exec(compile(s,str(p),'exec'),{'__file__':str(p),'__name__':'__main__'})
+          PY
+      - name: Existing full editor regression
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('lingotech/release43/test_release.py').resolve()
+          s=p.read_text().replace('new_context(viewport=',"new_context(locale='zh-CN',viewport=")
+          exec(compile(s,str(p),'exec'),{'__file__':str(p),'__name__':'__main__'})
+          PY
+      - name: Camera, source export, scene details and metadata checks
+        run: python lingotech/release451/test_extra.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-v451-release-evidence
+          retention-days: 14
+          path: |
+            lingotech/index.html
+            lingotech/release.json
+            lingotech/og-v451.png
+            lingotech/release45/test-output/test-report.json
+            lingotech/release45/test-output/*mobile.png
+            lingotech/release43/test-output/test-report.json
+            lingotech/release451/test-output/
+      - name: Commit tested assets to candidate branch only
+        if: success() && github.ref == 'refs/heads/fix/lingotech-v451-final-qa-20261031'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech/release.json lingotech/og-v451.png
+          git diff --cached --quiet || git commit -m 'Publish tested v4.5.1 camera and metadata fixes to candidate branch'
+          git push origin HEAD:fix/lingotech-v451-final-qa-20261031
