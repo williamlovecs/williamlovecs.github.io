@@ -1,0 +1,53 @@
+name: LingoTech ABC verified release
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/lingotech-abc/**
+      - .github/workflows/lingotech-abc-release.yml
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-abc-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply only to the verified live v4 baseline
+        run: python tools/lingotech-abc/apply_release.py
+      - name: Check exact tested HTML bytes and path scope
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,subprocess,json
+          expected='c6c29e63fc443e63631072b39b76cf736c275d7fd7512ae1ad0ff9442947645c'
+          targets=['lingotech/index.html','lingotech-photo-booth/index.html']
+          hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in targets}
+          assert all(v==expected for v in hashes.values()),hashes
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert changed.issubset(set(targets+['lingotech/release.json'])),changed
+          report={'version':'4.1','hashes':hashes,'changed':sorted(changed),'local_checks':{'functional':22,'render_cases':84,'theme_cases':12},'not_verified':['Physical WeChat/iOS/Android','Actual target app posting','Mainland venue network']}
+          Path('abc-release-evidence.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Commit scoped release
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech-photo-booth/index.html lingotech/release.json
+          git commit -m 'Release LingoTech 4.1: community finishes and direct-sharing diagnostics'
+          git push origin HEAD:main
+          git rev-parse HEAD > abc-release-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lingotech-abc-release-evidence
+          retention-days: 7
+          path: |
+            abc-release-evidence.json
+            abc-release-commit.txt
