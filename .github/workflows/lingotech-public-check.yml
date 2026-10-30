@@ -11,28 +11,31 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 4
+    timeout-minutes: 5
     steps:
-      - name: Check deployed bytes without submitting data
+      - uses: actions/checkout@v4
+      - name: Check both deployed URLs against the release manifest, no form submissions
         run: |
           python - <<'PY'
           import urllib.request,hashlib,time,json
-          expected='117850026c51263740426d55e8a26db9d94c719ca659b62f773f835cc794184c'
+          from pathlib import Path
+          manifest=json.loads(Path('lingotech/release.json').read_text())
+          expected=manifest['html_sha256']
           urls=['https://williamlovecs.github.io/lingotech/','https://williamlovecs.github.io/lingotech-photo-booth/']
           results=[]
           for url in urls:
-              item={'url':url,'verified':False}
-              for attempt in range(10):
+              item={'url':url,'verified':False,'release':manifest['version']}
+              for attempt in range(18):
                   try:
                       req=urllib.request.Request(url,headers={'User-Agent':'LingoTech-release-check','Cache-Control':'no-cache'})
                       with urllib.request.urlopen(req,timeout=12) as r:
-                          data=r.read(); item.update(httpStatus=r.status,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+                          data=r.read();item.update(httpStatus=r.status,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
                       item['verified']=item['sha256']==expected
-                      if item['verified']: break
-                  except Exception as e: item['error']=str(e)[:220]
+                      if item['verified']:break
+                  except Exception as e:item['error']=str(e)[:220]
                   time.sleep(5)
               results.append(item)
-          open('public-site-verification.json','w').write(json.dumps(results,indent=2))
+          Path('public-site-verification.json').write_text(json.dumps(results,indent=2))
           print(json.dumps(results,indent=2))
           assert all(x['verified'] for x in results),'Public site did not return expected bytes'
           PY
