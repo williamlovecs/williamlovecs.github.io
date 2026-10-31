@@ -602,7 +602,7 @@ document.querySelectorAll('.version').forEach(e=>e.textContent='v4.4');
 try{const u=new URL(location.href);for(const k of [...u.searchParams.keys()])if(/^utm_/i.test(k)||k==='v')u.searchParams.delete(k);history.replaceState(null,'',u.pathname+u.search+u.hash);}catch(_){}
 const oldDiag43=diagnostics;diagnostics=function(){return{...oldDiag43(),app:'LingoTech Photo Booth 4.3'};};window.LingoTechShareDiagnostics=diagnostics;
 window.LingoTechQA43={snapshot:()=>({...window.PhotoBoothQA.snapshot(),scene:state.scene,memoryStrip:state.memoryStrip,version:'4.3'}),layout:layout43,render:(target,model)=>drawArt(target,{...state,...model}),chooseScene:chooseScene43};
-if(typeof ResizeObserver==='function'){let width43=0;new ResizeObserver(entries=>{const w=entries[0]?.contentRect.width||0;if(Math.abs(w-width43)>.5){width43=w;fitStage();}}).observe($('stage'));}
+if(typeof ResizeObserver==='function'){let width43=0;new ResizeObserver(entries=>{const w=entries[0]?.contentRect.width||0;if(Math.abs(w-width43)>.5){width43=w;requestAnimationFrame(fitStage);}}).observe($('stage'));}
 if(document.fonts?.ready)document.fonts.ready.then(()=>scheduleRender(true));
 
 
@@ -618,7 +618,7 @@ setLanguage=function(next){setLanguage43(next);scheduleRender(true);};
 // v4.4: quiet-zone QR links to the clean Photo Booth URL. The QR contains no user data.
 const QR44_DESTINATION='https://williamlovecs.github.io/lingotech/';
 const QR44_MODULES=37;
-const QR44_BITS=atob('AAAAAAAAAAAAAAAAAAAAAAAAAP4vM/gEEfkQQC6I1roBdNZF0AuhXq6AQUaJBAP6qq/gAAcOAACW940AAEbnckA2wyS8AClKE2ACbdzlgEqIDgABjDOv4BGE+xoAXklcEAHL1TpAK5KDZgB6EPcwC77Y+gAAQCRcA/mjqkAQW5EfALpb74AF1ADfgC6WBjoBBPq1IA/sFJkAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
+const QR44_BITS=atob('/lLbI/wSEsgQbq140Lt1XcSV26DUBi7BLLHBB/qqqq/gBNwPABsOmYhh7Ie7rA/kANfCg1o3f++wxlG0eibQKlOIyFn16YF38/1vTnzaIoa+DqqNi9H9OuhdxbeO7zRS7Dr1dL7zmoGnSqcaCxfvxupba0UEEGfHNvZADLMTDN0L6OcfPf+ASk8Ee/oX1KuwT4FrG7r6Z7+F1GjS2C6OdLBnBAOgQv/luGr0gA==');
 state.showQr44=true;
 function qr44Geometry(W,H){
  const e=Math.round(Math.min(W,H)*.035),w=215,h=225;
@@ -1139,6 +1139,7 @@ updateJoin();updateUI();
   updateUI=function(){
     oldUpdate();
     const ready=readyExport(),f=ready?shareCandidate():null;
+    $('resultImage').alt=$('viewerImage453').alt=language==='zh'?'长按这张成片保存到相册':'Touch and hold this framed photo to save';
     $('modalDownload').removeAttribute('data-i18n');$('modalDownload').textContent=t(mobile()||isWechat()?'view453':'download453');
     $('modalDownload').disabled=!ready;
     $('modalShare').removeAttribute('data-i18n');$('modalShare').textContent=t('native453');$('modalShare').hidden=!f;$('modalShare').disabled=!ready||sharing;
