@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://williamlovecs.github.io/visa-counter/sitemap.xml
