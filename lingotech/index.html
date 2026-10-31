@@ -1,12 +1,12 @@
 <!doctype html>
-<!-- LingoTech release v4.5.2 deep regression and reliability fixes -->
+<!-- LingoTech v4.5.3 mobile album-first save and sharing -->
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f6f2"><meta name="description" content="LingoTech Photo Booth. Make a little keepsake with your own photo. Local editing, no AI face changes.">
 <title>LingoTech Photo Booth</title>
 
-<meta name="app-version" content="4.5.2">
+<meta name="app-version" content="4.5.3">
 <style>:root{--ink:#101d42;--muted:#69738a;--blue:#165dff;--yellow:#ffe02e;--cream:#f7f6f2;--line:#e0e3e9;--white:#fff;--font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:wait;opacity:.45}button,a{touch-action:manipulation}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,canvas:focus-visible{outline:3px solid #d99c00;outline-offset:4px}[hidden]{display:none!important}button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}.site-header{max-width:1240px;margin:auto;padding:23px 30px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:9px}.brand img{object-fit:contain}.brand b{font-size:27px;letter-spacing:-1.2px;line-height:1}.brand small{display:block;font-size:10px;margin-top:4px}.brand-dot{color:var(--blue)}.product-word{font-size:9px;line-height:1.4;letter-spacing:.1em;padding-left:14px;margin-left:7px;border-left:1px solid #ccd1da;font-weight:700}.header-right{display:flex;align-items:center;gap:17px}.local-note{font-size:11px;color:var(--muted);display:flex;gap:6px;align-items:center}.local-note i,.status i{width:6px;height:6px;border-radius:50%;background:#3d8468;display:inline-block;flex-shrink:0}.language-btn{border:1px solid #cfd5e1;background:transparent;border-radius:8px;font-size:12px;font-weight:700;min-height:35px;min-width:43px}.eyebrow{font-size:10px;letter-spacing:.16em;font-weight:800;color:var(--blue);margin:0 0 18px}main{max-width:1240px;margin:auto;padding:0 30px}.welcome{min-height:690px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:55px;padding:45px 0 34px}.welcome h1{font-size:clamp(42px,4.3vw,64px);font-weight:850;letter-spacing:-2.6px;line-height:1.19;margin:0 0 22px}.welcome h1 span{color:var(--blue);position:relative;z-index:1}.welcome h1 span:after{content:'';position:absolute;bottom:1px;left:0;right:0;height:12px;background:var(--yellow);z-index:-1;transform:rotate(-1deg)}.welcome-desc{font-size:15px;line-height:1.85;color:var(--muted);max-width:430px;margin:0 0 26px}.upload-card{background:#fff;padding:22px;border-radius:19px;border:1px solid var(--line);max-width:478px;box-shadow:0 10px 28px #101d4204}.upload-card.drag-over{outline:3px solid var(--blue);background:#f0f5ff}.upload-title{display:flex;align-items:center;gap:12px;margin-bottom:18px}.step-dot{width:25px;height:25px;display:inline-grid;place-items:center;flex-shrink:0;background:#edf2ff;color:var(--blue);font-size:10px;border-radius:7px;font-weight:800}.upload-title b{font-size:16px}.upload-title small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.upload-actions{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}.btn{border:0;border-radius:10px;min-height:49px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 17px;font-size:14px;font-weight:750;white-space:nowrap;transition:background .15s,transform .15s}.btn:not(:disabled):hover{transform:translateY(-1px)}.btn.primary{background:var(--blue);color:#fff}.btn.outline{background:#fff;border:1px solid #cfd6e3;color:var(--ink)}.btn.yellow{background:var(--yellow);color:var(--ink)}.upload-bottom{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:13px;font-size:10px;color:var(--muted)}.text-btn{border:0;background:transparent;color:var(--blue);font-size:12px;font-weight:650;padding:7px 0;min-height:32px}.text-btn.muted{color:var(--muted)}.promise{font-size:11px;color:var(--muted);margin:16px 0 0 2px}.welcome-art{position:relative;height:570px}.art-orbit{position:absolute;width:480px;height:480px;left:8px;top:30px;border:1px solid #d7dfed;border-radius:50%;background:radial-gradient(circle,#e7efff 0,transparent 68%)}.art-orbit:after{content:'';position:absolute;inset:42px;border:1px dashed #c9d4e6;border-radius:50%}.sample-card{position:absolute;width:345px;background:#fff;padding:12px 12px 18px;box-shadow:0 16px 34px #1725471c;border:1px solid #fff}.sample-photo{height:225px;overflow:hidden}.sample-photo img{width:100%;height:100%;object-fit:cover}.sample-one{top:32px;left:7px;transform:rotate(-8deg)}.sample-two{right:-3px;top:234px;transform:rotate(7deg);background:#fffdf5}.sample-caption{padding:13px 5px 0;display:flex;justify-content:space-between;align-items:center;gap:12px}.sample-caption i{font-family:Georgia,serif;font-weight:bold;font-size:22px}.sample-caption small{font-size:8px;font-weight:650;letter-spacing:.03em}.art-sticker{position:absolute;right:0;top:110px;transform:rotate(8deg);background:var(--yellow);padding:17px 19px;font-size:17px;font-weight:750;line-height:1.5;box-shadow:0 4px 0 #1426570a}.art-spark{position:absolute;bottom:61px;left:20px;font-size:65px;color:var(--blue);line-height:1}.sample-disclaimer{position:absolute;right:15px;bottom:0;font-size:10px;color:var(--muted)}.site-footer{max-width:1240px;margin:0 auto;padding:19px 30px 25px;border-top:1px solid var(--line);font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:18px}.version{border:1px solid var(--line);padding:2px 5px;border-radius:4px;margin-left:5px;font-size:9px}.site-footer button{font-size:10px}.editor{padding:26px 0 32px}.editor-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.editor-bar .eyebrow{margin-bottom:7px;font-size:9px}.editor-bar h1{font-size:27px;letter-spacing:-.9px;margin:0;line-height:1.3}.editor-links{display:flex;gap:18px}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 365px;gap:24px;align-items:start}.preview-panel{min-width:0}.preview-top{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 12px;gap:12px}.status{display:flex;gap:7px;align-items:center;font-size:11px;color:var(--muted)}.mono{font-family:ui-monospace,monospace;font-size:10px;color:var(--muted)}.stage{border:1px solid #dbe2ec;border-radius:18px;background-color:#e9eef3;background-image:radial-gradient(#c9d3df 1px,transparent 1px);background-size:15px 15px;padding:25px;min-height:530px;display:grid;place-items:center;overflow:hidden}.canvas-shell{width:var(--stage-w,100%);max-width:100%;box-shadow:0 17px 35px #0b193c26;line-height:0;background:#fff}.canvas-shell canvas{width:100%;height:auto;display:block;user-select:none;touch-action:pan-y}.canvas-shell canvas.can-crop{touch-action:none;cursor:grab}.canvas-shell canvas.can-crop:active{cursor:grabbing}.preview-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;margin:9px 3px;color:var(--muted)}.preview-foot button{font-size:11px}.landscape-tip{background:#eaf0ff;border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;line-height:1.6}.landscape-tip .text-btn{flex-shrink:0;font-size:11px}.controls{display:flex;flex-direction:column;gap:13px}.control-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.section-heading{display:flex;gap:8px;align-items:center;margin-bottom:15px}.section-heading h2{margin:0;font-size:14px;font-weight:750}.small-label{font-size:8px;letter-spacing:.07em;margin-left:auto;color:#8a94a8;white-space:nowrap}.templates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.template{min-width:0;background:#f7f7f5;border:2px solid transparent;border-radius:11px;padding:6px;text-align:left;color:var(--ink);transition:border-color .15s}.template.active{border-color:var(--blue);background:#eef3ff}.template canvas{width:100%;height:auto;display:block;box-shadow:0 1px 4px #11193314}.template span{display:block;padding-top:8px}.template b{display:block;white-space:nowrap;font-size:10px;letter-spacing:-.2px}.template small{display:block;color:var(--muted);font-size:9px;margin-top:3px}.field-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:650;margin-bottom:10px}.field-heading .text-btn{font-size:10px;min-height:24px;padding:3px 0}.segments{display:flex;gap:4px;background:#eff1f5;border-radius:10px;padding:4px}.segments button{flex:1;min-width:0;border:0;background:transparent;border-radius:7px;padding:8px 4px;display:flex;flex-direction:column;gap:3px;align-items:center;color:#67738b;font-size:10px}.segments b{font-size:12px}.segments button.active{background:#fff;box-shadow:0 2px 5px #1c2d5410;color:var(--ink)}.fit-row{display:flex;gap:7px;margin-top:15px}.fit-choice{flex:1;display:flex;gap:6px;align-items:center;justify-content:center;border:1px solid #e1e5ed;border-radius:8px;background:#fff;padding:10px 5px;font-size:11px;font-weight:650;color:#67738b}.fit-choice.active{background:#eef4ff;border-color:#b8ceff;color:var(--blue)}.help{font-size:11px;line-height:1.7;color:var(--muted);margin:10px 0 0}.personal-card{padding:0}.personal-card summary{display:flex;gap:8px;align-items:center;padding:17px;list-style:none;cursor:pointer;font-size:13px;font-weight:700}.personal-card summary::-webkit-details-marker{display:none}.optional{color:var(--muted);font-size:10px;font-weight:400}.plus{margin-left:auto;color:var(--blue);font-size:17px}.personal-card[open] .plus{transform:rotate(45deg)}.personal-inner{padding:0 17px 17px}.field-label{display:block;font-size:11px;font-weight:650;margin-bottom:8px}input[type=text],input[type=url],select{width:100%;border:1px solid #d9dfeb;border-radius:8px;padding:11px;background:#fff;min-height:43px;color:var(--ink);font-size:14px}input[type=range]{width:100%;height:30px;accent-color:var(--blue)}#cropControls{margin-top:12px}.tag-label{display:flex;gap:9px;align-items:center;font-size:11px;font-weight:650;margin:15px 0 8px}.tag-label small{color:var(--muted);font-weight:400}.tags{display:flex;gap:5px;flex-wrap:wrap}.tags button{background:#f3f5f9;color:#5a6680;border:1px solid transparent;border-radius:6px;padding:8px 9px;font-size:10px}.tags .active{background:#eaf0ff;border-color:#b6caff;color:var(--blue)}.bg-label{margin-top:15px}.edit-promise{font-size:10px;line-height:1.8;color:var(--muted);margin:0 7px}.save-bar{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px}.save-meta{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:13px}.save-meta b{font-size:12px}.save-meta span{font-size:10px;color:var(--muted)}.save-buttons{display:grid;grid-template-columns:1.3fr 1fr;gap:9px}.save-buttons .btn{font-size:13px;min-height:48px}.file-error{background:#fff0ed;color:#8e2b15;border:1px solid #edc4ba;padding:12px;border-radius:8px;font-size:12px;line-height:1.6;margin:18px 0}.modal{position:fixed;inset:0;background:#0b1737ab;z-index:1000;display:flex;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(4px)}.modal-card{background:#fff;border-radius:20px;max-height:92svh;overflow:auto;width:100%;max-width:480px;padding:23px;box-shadow:0 20px 90px #09122533}.modal-head{display:flex;justify-content:space-between;align-items:start;gap:12px}.modal-head h2{font-size:22px;letter-spacing:-.7px;margin:5px 0 0}.modal-head .eyebrow{font-size:8px;margin:2px 0}.close-btn{border:0;background:#eff2f7;border-radius:50%;width:34px;height:34px;flex-shrink:0;font-size:23px;color:var(--ink)}.result-image{display:block;max-width:100%;width:auto;max-height:55svh;object-fit:contain;margin:16px auto;-webkit-touch-callout:default;user-select:auto}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.modal-actions .btn{font-size:12px}.join-section{background:#f7f8fc;border-radius:12px;padding:17px;margin-top:18px}.join-section small{font-size:8px;letter-spacing:.12em;color:var(--blue);font-weight:750}.join-section h3{font-size:16px;margin:8px 0;letter-spacing:-.3px}.join-section p{font-size:10px;color:var(--muted)}.join-section .btn{font-size:12px;min-height:42px;margin-top:8px;width:100%}.demo-notice{font-size:11px;color:#916a00;line-height:1.6}.setup-card label{display:block;font-size:12px;font-weight:700;margin:18px 0 8px}.setup-card .btn{width:100%;margin-top:12px}.setup-card>p.help:last-child{font-size:10px}.loading{position:fixed;inset:0;background:#f8faf5e8;z-index:2000;display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;font-size:13px}.spinner{width:33px;height:33px;border:3px solid #dce4f7;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}.loading button{background:none;border:0;color:var(--blue);padding:10px}.toast{position:fixed;z-index:3000;left:50%;bottom:100px;transform:translate(-50%,15px);opacity:0;pointer-events:none;max-width:min(90vw,480px);padding:12px 17px;border-radius:12px;color:#fff;background:#101d42ed;box-shadow:0 8px 25px #101d4230;transition:opacity .2s,transform .2s;font-size:12px;line-height:1.5;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@keyframes spin{to{transform:rotate(360deg)}}
 @media(min-width:900px){.preview-panel{position:sticky;top:16px}.canvas-shell{max-width:100%}.stage{height:min(68vh,760px)}.controls .save-bar{margin-top:1px}}
 @media(max-width:1050px){.welcome{gap:30px}.sample-card{width:300px}.sample-photo{height:200px}.welcome-art{height:520px}.sample-two{top:235px}.art-orbit{width:390px;height:390px}.art-sticker{right:-8px;top:140px}.workspace{grid-template-columns:minmax(0,1fr) 340px;gap:18px}}
@@ -705,7 +705,7 @@ qr44Geometry=function(W,H){
 /* v4.5: canonical entry, optional event CTA, opt-in local counters, shared-device privacy.
    This code runs inside the existing editor closure. No image assets are replaced.
    No analytics requests, photos, nicknames, file names, or identifiers are sent/stored. */
-const VERSION45='4.5.2';
+const VERSION45='4.5.3';
 const LANG45='lingotech.language.v1', COUNTS45='lingotech.counts.v1', ENABLE45='lingotech.counts.enabled.v1', KIOSK45='lingotech.kiosk.v1';
 const store45={get:(k,session=false)=>{try{return(session?sessionStorage:localStorage).getItem(k);}catch(_){return null;}},set:(k,v,session=false)=>{try{(session?sessionStorage:localStorage).setItem(k,v);return true;}catch(_){return false;}},remove:(k)=>{try{localStorage.removeItem(k);}catch(_){}}};
 let kiosk45=store45.get(KIOSK45,true)==='1',countEnabled45=store45.get(ENABLE45)==='1',lastActive45=Date.now(),lastShareKey45='',prepared45=false;
@@ -917,6 +917,251 @@ if(typeof ResizeObserver==='function')new ResizeObserver(entries=>{const height=
 for(const ev of ['pointermove','touchmove'])document.addEventListener(ev,e=>{if(e.isTrusted&&(pointers.size||e.type==='touchmove'))touch45();},{passive:true});
 window.LingoTechQA452={version:'4.5.2',snapshot:()=>({sharing,shareRecovery:shareExpired452,exportFailed:exportFailed452,textureEditable:!$('communityPaper').hidden,formSignature:!!formSignature452})};
 updateJoin();updateUI();
+
+/* v4.5.3 — album-first mobile export; all images remain on this device. */
+(function installMobileExport453(){
+  const mobile=()=>/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||
+    (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const ios=()=>/iPhone|iPad|iPod/i.test(navigator.userAgent)||
+    (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  let notice='',viewerMode='default';
+  const words={
+    zh:{save453:'保存图片',share453:'分享照片',wechat453:'发微信 / 朋友圈',title453:'照片已生成',
+      hold453:'长按下方图片 → 选择“保存图片”或“添加到照片”。',
+      desktop453:'下载 JPG 图片，或使用系统分享。',
+      wechatTip453:'保存后，在微信聊天或朋友圈中从相册选这张图。',
+      noMenu453:'长按没有保存菜单？可试“查看大图”或系统分享。仍不可用时，请用 Safari / 系统浏览器重新打开。',
+      native453:'系统保存 / 分享',view453:'查看大图，长按保存',download453:'下载 JPG 文件',
+      more453:'更多：PNG、网站链接与检测',back453:'返回保存页',viewer453:'长按图片保存',
+      preparing453:'正在生成照片…',ready453:'图片已就绪 · 照片只在本机处理',
+      unsupported453:'当前浏览器不支持图片系统分享。请长按图片保存，再从微信相册发送。',
+      cancelled453:'分享已取消，或系统没有可用目标。照片仍在这里，可以长按保存。',
+      failed453:'系统分享未完成。请长按图片保存，再从微信相册发送。',
+      sent453:'已交给系统分享；是否发出，请在微信或目标应用确认。',
+      pending453:'系统分享处理中。图片仍保留在本页。',
+      recover453:'系统面板已关闭？返回图片保存',
+      unknown453:'已返回保存页。系统未报告结果，请在目标应用确认；仍可长按图片保存。',
+      file453:'已请求下载文件，不代表已存入相册。',
+      preparingPng453:'无损 PNG 仍在生成，JPG 已可保存。',
+      pngFailed453:'无损 PNG 暂不可用；JPG 仍可保存。换一个画幅可重新生成。'},
+    en:{save453:'Save photo',share453:'Share photo',wechat453:'WeChat / Moments',title453:'Your photo is ready',
+      hold453:'Touch and hold the image → Save Image or Add to Photos.',
+      desktop453:'Download the JPG image, or use system sharing.',
+      wechatTip453:'Then choose this photo from your album in a WeChat chat or Moments.',
+      noMenu453:'No save option? Try Full-size image or system sharing. If neither works, reopen in Safari / your system browser.',
+      native453:'System save / share',view453:'Full-size image · hold to save',download453:'Download JPG file',
+      more453:'More: PNG, website link & diagnostics',back453:'Back to save options',viewer453:'Touch and hold to save',
+      preparing453:'Preparing your photo…',ready453:'Photo ready · stays on this device',
+      unsupported453:'System image sharing is unavailable. Hold the image to save it, then choose it from your WeChat album.',
+      cancelled453:'Sharing was cancelled, or no target was available. Your photo is here; hold it to save.',
+      failed453:'System sharing did not finish. Hold the image to save it, then choose it from your WeChat album.',
+      sent453:'Handed to system sharing. Check WeChat or the target app to confirm delivery.',
+      pending453:'System sharing is in progress. Your photo is kept on this page.',
+      recover453:'Share sheet closed? Return to saving',
+      unknown453:'Back to saving. The system did not report a result; check the target app. You can still hold the image to save.',
+      file453:'File download requested. This does not confirm saving to Photos.',
+      preparingPng453:'Lossless PNG is still preparing. JPG is ready to save.',
+      pngFailed453:'Lossless PNG is unavailable; JPG can still be saved. Change the layout to regenerate.'}
+  };
+  Object.assign(WORDS.zh,words.zh,{save:words.zh.save453,share:words.zh.share453,shareWechat:words.zh.wechat453,preparing:words.zh.preparing453,exportReady:words.zh.ready453,exportFailed:'图片生成失败，请点“重新生成照片”。'});
+  Object.assign(WORDS.en,words.en,{save:words.en.save453,share:words.en.share453,shareWechat:words.en.wechat453,preparing:words.en.preparing453,exportReady:words.en.ready453,exportFailed:'Could not prepare your photo. Select Retry preparing photo.'});
+  const card=document.querySelector('#exportModal .export-card');
+  const head=card.querySelector('.modal-head'),actions=card.querySelector('.modal-actions');
+  const hint=document.createElement('p');hint.id='albumHint453';hint.className='album-hint453';
+  const meta=document.createElement('p');meta.id='imageMeta453';meta.className='image-meta453';
+  const recover=document.createElement('button');recover.type='button';recover.id='recover453';recover.className='btn outline';recover.hidden=true;recover.dataset.i18n='recover453';
+  const more=document.createElement('details');more.id='exportMore453';more.className='export-more453';
+  const summary=document.createElement('summary');summary.dataset.i18n='more453';more.append(summary);
+  // Keep registrations, website sharing and diagnostics, but never put them before the photo.
+  const keep=new Set([head,$('resultImage'),$('demoNotice'),actions,$('shareNote'),$('wechatGuide')]);
+  for(const child of Array.from(card.children))if(!keep.has(child))more.append(child);
+  if($('nextVisitor45'))more.append($('nextVisitor45'));
+  const download=document.createElement('button');download.type='button';download.id='downloadJpg453';download.className='text-btn';download.dataset.i18n='download453';more.insertBefore(download,more.children[1]||null);
+  card.replaceChildren(head,hint,$('resultImage'),meta,$('demoNotice'),actions,$('shareNote'),recover,$('wechatGuide'),more);
+  $('exportTitle').dataset.i18n='title453';
+  $('shareNote').setAttribute('role','status');$('shareNote').setAttribute('aria-live','polite');
+  $('resultImage').alt=language==='zh'?'长按这张成片保存到相册':'Touch and hold this framed photo to save';
+  // The standalone in-page viewer is a real IMG, not canvas or a CSS background.
+  const viewer=document.createElement('div');viewer.id='photoViewer453';viewer.className='modal';viewer.hidden=true;
+  viewer.setAttribute('role','dialog');viewer.setAttribute('aria-modal','true');viewer.setAttribute('aria-labelledby','viewerTitle453');
+  viewer.innerHTML='<div class="modal-card photo-viewer453"><div class="modal-head"><h2 id="viewerTitle453" data-i18n="viewer453"></h2><button id="viewerBack453" type="button" class="btn outline" data-i18n="back453"></button></div><img id="viewerImage453" alt="Full-size framed photo"><p class="help" data-i18n="noMenu453"></p></div>';
+  document.body.append(viewer);
+  const style=document.createElement('style');style.textContent=`
+    #exportModal .export-card{max-width:520px}
+    #exportModal .modal-head{flex-wrap:nowrap;align-items:flex-start}
+    #exportModal .modal-head h2{margin:4px 0 0;font-size:23px;line-height:1.3}
+    #exportModal .modal-head .eyebrow{font-size:9px}
+    #exportModal .album-hint453{font-size:14px;font-weight:650;line-height:1.55;padding:10px 12px;background:#eff4ff;border-radius:10px;margin:12px 0 8px}
+    #exportModal .result-image{max-height:43svh;max-width:100%;width:auto;display:block;margin:8px auto;object-fit:contain;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;touch-action:auto}
+    #imageMeta453{font-size:10px;color:var(--muted);text-align:center;line-height:1.5;margin:5px 0 12px}
+    #exportModal .modal-actions{grid-template-columns:1fr;gap:8px}
+    #exportModal .modal-actions .btn{min-height:46px;font-size:14px;white-space:normal}
+    #exportModal .share-note{font-size:12px;line-height:1.55;margin:10px 0}
+    #exportModal .wechat-guide{margin:10px 0;padding:10px 12px}
+    #exportModal .wechat-guide h3,#exportModal #directRetry,#exportModal #saveHint,#wechatInModal,#recoverShare452,#recoverShareModal452{display:none!important}
+    #exportModal .wechat-guide p{margin:0 0 4px;font-size:12px;line-height:1.55}
+    #exportMore453{margin:14px 0 0;border-top:1px solid var(--line);padding-top:12px}
+    #exportMore453>summary{min-height:36px;font-size:12px;font-weight:650;color:var(--muted);cursor:pointer}
+    #exportMore453 .share-path-label{margin-top:14px}
+    #recover453{width:100%;min-height:44px;white-space:normal;font-size:12px}
+    #photoViewer453{padding:10px}
+    #photoViewer453 .photo-viewer453{max-width:1000px;padding:14px;max-height:96svh}
+    #photoViewer453 .modal-head{align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    #viewerTitle453{font-size:17px;margin:0}
+    #viewerImage453{display:block;width:100%;height:auto;max-width:100%;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;touch-action:auto}
+    @media(max-width:650px){#exportModal{padding:8px}#exportModal .export-card{max-height:95svh;padding:14px}#exportModal .album-hint453{font-size:13px}#exportModal .result-image{max-height:39svh}#exportModal .modal-actions .btn{min-height:44px}#exportModal .wechat-guide .disclaimer{font-size:10px}}
+    @media(max-height:600px){#exportModal .result-image{max-height:34svh}}
+  `;document.head.append(style);
+
+  const oldClose=closeModal;
+  closeModal=function(){const wasViewer=activeModal==='photoViewer453';oldClose();if(wasViewer)$('viewerImage453').removeAttribute('src');};
+  $('closeExport').onclick=()=>closeModal();$('closeSetup').onclick=()=>closeModal();
+  const oldOpen=openExport;
+  showExportGuide=function(mode='default'){
+    exportView=typeof mode==='string'?mode:'default';
+    const wx=isWechat()||exportView==='wechat';
+    $('wechatGuide').hidden=!wx;
+    const ps=$('wechatGuide').querySelectorAll('p');
+    if(ps[0]){ps[0].removeAttribute('data-i18n');ps[0].textContent=t('wechatTip453');}
+    if(ps[1]){ps[1].removeAttribute('data-i18n');ps[1].textContent=t('noMenu453');}
+    if(ps[2])ps[2].hidden=true;
+    $('saveHint').hidden=true;$('wechatInModal').hidden=true;
+    hint.textContent=t(mobile()||wx?'hold453':'desktop453');
+  };
+  openExport=function(mode='default'){
+    if(!readyExport()){toast(t('unready'));return;}
+    clearTimeout(toastTimer);$('toast').classList.remove('show');
+    const same=activeModal==='exportModal';
+    if(!same)oldOpen(mode);else showExportGuide(mode);
+    $('resultImage').src=exportCache.data;photoDataUrl=exportCache.data;
+    if(!same){more.open=false;card.scrollTop=0;}
+    updateUI();
+  };
+  function viewImage(){
+    if(!readyExport())return;
+    viewerMode=exportView;
+    const data=exportCache.data;
+    openModal('photoViewer453');
+    $('viewerImage453').src=data;
+    viewer.querySelector('.modal-card').scrollTop=0;
+  }
+  $('viewerBack453').onclick=()=>openExport(viewerMode);
+  viewer.onclick=e=>{if(e.target===viewer)openExport(viewerMode);};
+  function downloadJpg(){
+    if(!readyExport())return;
+    saveBlob(exportCache.jpgBlob,exportCache.jpgName);notice='file453';updateUI();
+  }
+  saveJpg=function(){if(mobile()||isWechat()){viewImage();return;}downloadJpg();};
+  downloadPhoto=function(){
+    if(!readyExport()){toast(t('unready'));return;}
+    notice='';openExport(isWechat()?'wechat':'default');
+    // Downloading a file is NOT equivalent to adding it to the phone's photo album.
+    if(!mobile()&&!isWechat())downloadJpg();
+  };
+  download.onclick=downloadJpg;
+  $('downloadBtn').onclick=()=>downloadPhoto();
+  $('modalDownload').onclick=()=>saveJpg();
+  $('previewBtn').onclick=()=>openExport('default');
+  $('savePng').onclick=()=>{if(readyExport()&&exportCache.blob){saveBlob(exportCache.blob,exportCache.filename);notice='file453';updateUI();}};
+
+  sharePhoto=function(channel='photo'){
+    if(!readyExport()||sharing)return;
+    notice='';
+    // A WeChat-labelled button opens the useful photo first, not a generic share sheet.
+    if(channel==='wechat'||(isWechat()&&channel!=='native')){openExport('wechat');return;}
+    const f=shareCandidate();
+    openExport(isWechat()?'wechat':'default');
+    if(!f){lastShareEvent={action:'photo',outcome:'unsupported',error:null};notice='unsupported453';updateUI();refreshDiagnostics();return;}
+    const session=++shareSession,revision=state.revision;
+    sharing=true;notice='pending453';lastShareEvent={action:'photo',outcome:'requested',error:null};updateUI();
+    const settle=(outcome,error,key)=>{
+      if(session!==shareSession)return;
+      sharing=false;
+      if(revision!==state.revision){updateUI();return;}
+      lastShareEvent={action:'photo',outcome,error:error||null};notice=key;
+      updateUI();refreshDiagnostics();
+    };
+    // Prepared File; no await, fetch, timer, or image encoding before this user-gesture call.
+    try{
+      const result=navigator.share({files:[f]});
+      Promise.resolve(result).then(()=>settle('handed_to_system_not_delivery_confirmation',null,'sent453'))
+        .catch(e=>settle(e?.name==='AbortError'?'cancelled_or_no_target':'failed',e?.name||'Error',e?.name==='AbortError'?'cancelled453':'failed453'));
+    }catch(e){settle(e?.name==='AbortError'?'cancelled_or_no_target':'failed',e?.name||'Error',e?.name==='AbortError'?'cancelled453':'failed453');}
+  };
+  recover.onclick=()=>{
+    if(!sharing)return;
+    shareSession++;sharing=false;clearTimeout(shareTimer452);shareExpired452=false;
+    lastShareEvent={action:lastShareEvent.action,outcome:'result_unknown_user_recovered',error:null};
+    notice='unknown453';updateUI();refreshDiagnostics();
+  };
+  $('shareBtn').onclick=()=>sharePhoto('photo');
+  $('wechatShare').onclick=()=>sharePhoto('wechat');
+  $('modalShare').onclick=()=>sharePhoto('native');
+  $('wechatInModal').onclick=()=>sharePhoto('wechat');
+  $('directRetry').onclick=()=>sharePhoto('native');
+
+  // JPG is the critical path. A slower/larger lossless PNG must not block mobile save/share.
+  prepareExport=async function(){
+    if(!canExport())return;
+    const token=++exportToken,revision=state.revision;
+    exportPending=true;exportFailed452=false;updateUI();
+    const copy=document.createElement('canvas');copy.width=canvas.width;copy.height=canvas.height;
+    try{
+      copy.getContext('2d').drawImage(canvas,0,0);
+      const jpg=await canvasBlob(copy,'image/jpeg',.94),data=await blobAsData(jpg);
+      if(token!==exportToken||revision!==state.revision)return;
+      const base=`${state.filename}-${state.template}-${state.ratio}`;
+      if(exportCache?.url)URL.revokeObjectURL(exportCache.url);
+      const cache={jpgBlob:jpg,file:new File([jpg],base+'.jpg',{type:'image/jpeg'}),jpgName:base+'.jpg',data,revision,
+        blob:null,pngFile:null,filename:base+'.png',url:null,pngPending:true,pngError:false};
+      exportCache=cache;exportPending=false;exportFailed452=false;
+      if(state.own&&!prepared45){prepared45=true;count45('photo_prepared');}
+      updateUI();
+      try{
+        const png=await canvasBlob(copy,'image/png');
+        if(token!==exportToken||revision!==state.revision||exportCache!==cache)return;
+        cache.blob=png;cache.pngFile=new File([png],base+'.png',{type:'image/png'});cache.url=URL.createObjectURL(png);
+      }catch(_){if(exportCache===cache)cache.pngError=true;}
+      finally{if(exportCache===cache){cache.pngPending=false;updateUI();}}
+    }catch(_){
+      if(token===exportToken&&revision===state.revision){exportPending=false;exportFailed452=true;setError(t('exportFailed'));updateUI();}
+    }finally{copy.width=1;copy.height=1;}
+  };
+  const oldDrop=dropExport;
+  dropExport=function(){
+    notice='';if(sharing){shareSession++;sharing=false;}
+    oldDrop();
+    // Do not leave a previous guest's or previous edit's image in either preview.
+    $('viewerImage453').removeAttribute('src');
+    if(activeModal==='exportModal')$('resultImage').removeAttribute('src');
+  };
+  const oldUpdate=updateUI;
+  updateUI=function(){
+    oldUpdate();
+    const ready=readyExport(),f=ready?shareCandidate():null;
+    $('modalDownload').removeAttribute('data-i18n');$('modalDownload').textContent=t(mobile()||isWechat()?'view453':'download453');
+    $('modalDownload').disabled=!ready;
+    $('modalShare').removeAttribute('data-i18n');$('modalShare').textContent=t('native453');$('modalShare').hidden=!f;$('modalShare').disabled=!ready||sharing;
+    $('savePng').disabled=!ready||!exportCache?.blob;download.disabled=!ready;
+    $('savePng').title=exportCache?.pngPending?t('preparingPng453'):exportCache?.pngError?t('pngFailed453'):'';
+    $('shareNote').hidden=!notice;$('shareNote').textContent=notice?t(notice):'';
+    recover.hidden=!sharing;
+    // Recovery is visible as soon as the user returns; no arbitrary 30-second lock.
+    if(activeModal==='exportModal'){
+      showExportGuide(exportView);
+      if(ready){
+        if($('resultImage').getAttribute('src')!==exportCache.data)$('resultImage').src=exportCache.data;
+        const d=dims(state.ratio);meta.textContent=`${d.W} × ${d.H} · JPG · ${Math.max(1,Math.round(exportCache.jpgBlob.size/1024))} KB`;
+      }else meta.textContent=t('preparing453');
+    }
+  };
+  const oldClear=clearPhoto;
+  clearPhoto=function(reason='manual'){notice='';$('viewerImage453').removeAttribute('src');more.open=false;oldClear(reason);};
+  const oldDiagnostics=diagnostics;
+  diagnostics=function(){return{...oldDiagnostics(),app:'LingoTech Photo Booth 4.5.3',mobileSaveMode:mobile()?'image-preview-first':'download',photoUpload:false,nativeAlbumSaveConfirmed:false};};
+  window.LingoTechShareDiagnostics=diagnostics;
+  window.LingoTechQA453={version:'4.5.3',snapshot:()=>({mobile:mobile(),ios:ios(),sharing,previewOpen:activeModal==='exportModal',viewerOpen:activeModal==='photoViewer453',jpgReady:readyExport(),pngReady:!!exportCache?.blob,pngPending:!!exportCache?.pngPending,revision:state.revision,cacheRevision:exportCache?.revision,notice})};
+})();
 
 translate();scheduleRender(true);
 })();

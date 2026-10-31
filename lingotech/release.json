@@ -1,12 +1,12 @@
 {
-  "version": "4.5.2",
+  "version": "4.5.3",
   "canonical": "https://williamlovecs.github.io/lingotech/",
   "legacy": "https://williamlovecs.github.io/lingotech-photo-booth/",
   "legacy_behavior": "client-side redirect with meta-refresh and link fallback",
-  "baseline_commit": "6c59267b06c49982052ee50c128aeb57e126c0fb",
+  "baseline_commit": "65777d736274af6bea9339839814fd6174d115b0",
   "archive": "_archive/lingotech-photo-booth/v4.4-20261030/index.html",
   "archive_git_blob": "1382aacc30c32daab42354d0322e9a875f0f4c24",
-  "sha256": "53fcdcbfd6ca0db54d4c427ca713826c6af7b2e539b1f70472576d480396392f",
+  "sha256": "aaf0544eb892b1fbf691280062fac9eef017772332dacd9071618cbad5e38554",
   "legacy_sha256": "334e9d3b07874d9254cdeb635ddf97e2170dd0c41ed740e9d0b9e327883864df",
   "changes": [
     "optional event CTA",
@@ -25,10 +25,16 @@
     "recover unreturned native shares",
     "retry failed image export",
     "clean index.html and all query parameters",
-    "responsive action bar spacing"
+    "responsive action bar spacing",
+    "mobile image-preview-first save instead of automatic file download",
+    "WeChat entry shows image and album instructions before optional native sharing",
+    "cancelled/failed/pending shares retain a visible image and immediate recovery",
+    "photo before registration and diagnostic sections",
+    "JPG ready independently of background PNG encoding",
+    "full-size native IMG viewer; no photo upload"
   ],
   "analytics": "local only; no site-wide reporting",
-  "physical_wechat_acceptance": "requires real-device testing",
+  "physical_wechat_acceptance": "not performed; requires physical iPhone/Android WeChat testing",
   "previous_release_archive": "_archive/lingotech-photo-booth/v4.5.1-20261031/index.html",
   "social_preview_sha256": "77661ff57ea091ff6776fb0a9ad8aa3d52457924642df42148a73f0979957639"
 }
