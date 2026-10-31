@@ -1,0 +1,48 @@
+name: LingoTech v4.5.3 mobile save and share
+on:
+  push:
+    branches: ['fix/lingotech-v453-mobile-save-20261031']
+    paths: ['lingotech/release453/**', '.github/workflows/lingotech-v453-mobile.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-v453-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build against exact v4.5.2 baseline
+        run: python lingotech/release453/build.py
+      - name: Install regression browsers
+        run: |
+          pip install playwright==1.56.0 pillow==11.3.0
+          python -m playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Chromium mobile and export regression
+        run: BROWSER=chromium python lingotech/release453/test_mobile.py
+      - name: WebKit mobile and export regression
+        run: BROWSER=webkit python lingotech/release453/test_mobile.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-v453-mobile-evidence
+          retention-days: 14
+          path: |
+            lingotech/index.html
+            lingotech/release.json
+            lingotech/release453/test-output/
+      - name: Commit verified candidate only
+        if: success() && github.ref == 'refs/heads/fix/lingotech-v453-mobile-save-20261031'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech/release.json
+          git diff --cached --quiet || git commit -m 'Fix LingoTech mobile album save and resilient WeChat sharing v4.5.3'
+          git push origin HEAD:fix/lingotech-v453-mobile-save-20261031
