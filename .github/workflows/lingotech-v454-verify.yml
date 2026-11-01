@@ -1,0 +1,66 @@
+name: LingoTech v4.5.4 Android in-app save fallback
+on:
+  push:
+    branches: ['fix/lingotech-v454-webview-fallback-20261101']
+    paths:
+      - 'lingotech/release454/**'
+      - '.github/workflows/lingotech-v454-verify.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lingotech-v454-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium, WebKit and QR decoding
+        run: |
+          pip install playwright==1.56.0 pillow==11.3.0 opencv-python-headless==4.12.0.88
+          python -m playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Build fail-closed, preserving photos and QR bytes
+        run: python lingotech/release454/build.py
+      - name: Android WeChat fallback, native share, desktop and non-destructive updates (Chromium)
+        run: BROWSER=chromium python lingotech/release454/test_android.py
+      - name: Same targeted suite (WebKit)
+        run: BROWSER=webkit python lingotech/release454/test_android.py
+      - name: Preserve v4.5.3 mobile regression behavior (Chromium and WebKit)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          p=Path('lingotech/release453/test_mobile.py').resolve()
+          s=p.read_text(encoding='utf-8')
+          old="page.locator('#resultImage').is_visible() and page.locator('#modalShare').is_hidden()"
+          new="page.locator('#resultImage').is_visible() and page.locator('#modalShare').is_visible() and page.locator('#modalShare').inner_text()=='下载 JPG 文件'"
+          assert s.count(old)==1,'Historical regression expectation moved: investigate, do not mask'
+          s=s.replace(old,new)
+          for engine in ('chromium','webkit'):
+              os.environ['BROWSER']=engine
+              exec(compile(s,str(p),'exec'),{'__name__':'__main__','__file__':str(p)})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingotech-v454-verified-release
+          retention-days: 30
+          path: |
+            lingotech/index.html
+            lingotech/release.json
+            lingotech/release454/test-output/
+            lingotech/release453/test-output/*report.json
+      - name: Commit only fully tested assets to candidate branch
+        if: success() && github.ref == 'refs/heads/fix/lingotech-v454-webview-fallback-20261101'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lingotech/index.html lingotech/release.json
+          git diff --cached --quiet || git commit -m 'Build verified v4.5.4 Android WeChat fallback'
+          git push origin HEAD:fix/lingotech-v454-webview-fallback-20261101
