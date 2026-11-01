@@ -1,12 +1,12 @@
 {
-  "version": "4.5.3",
+  "version": "4.5.4",
   "canonical": "https://williamlovecs.github.io/lingotech/",
   "legacy": "https://williamlovecs.github.io/lingotech-photo-booth/",
   "legacy_behavior": "client-side redirect with meta-refresh and link fallback",
-  "baseline_commit": "65777d736274af6bea9339839814fd6174d115b0",
+  "baseline_commit": "50265b6101506dd10e4b28fc302eaacbd26e4ca2",
   "archive": "_archive/lingotech-photo-booth/v4.4-20261030/index.html",
   "archive_git_blob": "1382aacc30c32daab42354d0322e9a875f0f4c24",
-  "sha256": "aaf0544eb892b1fbf691280062fac9eef017772332dacd9071618cbad5e38554",
+  "sha256": "1de816f4e4ad19a07adfa8c7781c96093f81a45b66dbf7a11e0c2299417d2568",
   "legacy_sha256": "334e9d3b07874d9254cdeb635ddf97e2170dd0c41ed740e9d0b9e327883864df",
   "changes": [
     "optional event CTA",
@@ -31,10 +31,12 @@
     "cancelled/failed/pending shares retain a visible image and immediate recovery",
     "photo before registration and diagnostic sections",
     "JPG ready independently of background PNG encoding",
-    "full-size native IMG viewer; no photo upload"
+    "full-size native IMG viewer; no photo upload",
+    "Android/WeChat no-native-share JPG download fallback (does not promise Photos save)",
+    "non-destructive new-release reminder and user-initiated clean-URL refresh"
   ],
   "analytics": "local only; no site-wide reporting",
   "physical_wechat_acceptance": "not performed; requires physical iPhone/Android WeChat testing",
-  "previous_release_archive": "_archive/lingotech-photo-booth/v4.5.1-20261031/index.html",
+  "previous_release_archive": "_archive/lingotech-photo-booth/v4.5.3-20261101/index.html",
   "social_preview_sha256": "77661ff57ea091ff6776fb0a9ad8aa3d52457924642df42148a73f0979957639"
 }
